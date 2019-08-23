@@ -1,26 +1,36 @@
 
 var btn = document.getElementById('btn_load');
-var post = document.getElementById('post');
+var post = document.getElementById('post_load');
     if(btn){
         btn.addEventListener('click',function(){
-        
         var xhr = new XMLHttpRequest();
-        xhr.open("GET","http://localhost/wordpress/wp-json/wp/v2/posts",true);
-        xhr.send();
+        xhr.open("GET","http://localhost/wordpress/wp-json/wp/v2/posts",true);      
         xhr.onload = function(){
             if(xhr.status >= 200 && xhr.status < 400)
                 {
                 var data = JSON.parse(xhr.responseText);
-                console.log(data);
+                 setcontent(data);
                 }
             else
                 {
                     console.log("not coneted");
                 }
-                                 }
-                                 xhr.onerror=function(){
+                        }
+                                   xhr.onerror=function(){
                                      console.log("error occured");
                                  }
-
+                                 xhr.send();
                 });
+                
             }
+            function setcontent(data_obj){
+                var htm = '';
+               for(i = 0 ; i < data_obj.length ;i++){
+                htm += '<h2>'+ data_obj[i].title.rendered + '</h2>' ;
+                htm += '<p>' + data_obj[i].content.rendered +'</p>';
+               }
+               post.innerHTML  = htm;
+                     
+
+            }
+               
