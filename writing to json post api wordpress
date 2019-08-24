@@ -1,0 +1,28 @@
+//html fieldsinput type = "text" id= "title"/>
+<textarea id = "content"></textarea>
+
+<button id = "btn_submit_post"> save post </button>
+// write this code in function.php
+wp_enqueue_script( 'abapguru/handlejs', get_theme_file_uri( '/js/main.js' ), array(), '1.1', true );
+  
+WP_localize_script('abapguru/handlejs','magical',array(
+		'nonce' => wp_create_nonce('wp_rest')));
+    
+    //main.js
+     var btn_save = document.getElementById("btn_submit_post");
+               if(btn_save){
+
+                btn_save.addEventListener('click',function(){
+                    var json_obj_tosend = {
+                        "title":document.getElementById("title").value,
+                         "content":document.getElementById("content").value,
+                          "status": "publish"
+                                           }   
+                    var request = new XMLHttpRequest();
+                     request.open('POST','http://localhost/wordpress/wp-json/wp/v2/posts',true);  
+                     request.setRequestHeader('X-WP-Nonce',magical.nonce); 
+                     request.setRequestHeader('Content-Type', 'application/json');
+                     request.send(JSON.stringify(json_obj_tosend));
+                });
+               }
+    
